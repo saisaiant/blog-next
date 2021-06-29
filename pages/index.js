@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { format, parseISO, add } from 'date-fns'
 
 import { blogPosts } from '../lib/data'
 
@@ -12,19 +13,21 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1>My Blog</h1>
-      </main>
-
-      <div>
+      <div className="space-y-4">
         {blogPosts.map((item) => (
-          <div key={item.slug}>
-            <h1><Link href={`/blog/${item.slug}`}><a>{item.title}</a></Link></h1>
-            <p>{item.data.toString()}</p>
-            <p>{item.content}</p>
-          </div>
+          <BlogListItem key={item.slug} {...item} />
         ))}
       </div>
+    </div>
+  )
+}
+
+function BlogListItem({ slug, title, date, content }) {
+  return (
+    <div className="border border-gray-100 shadow hover:shadow-md rounded p-4">
+      <h1><Link href={`/blog/${slug}`}><a className="font-bold text-lg">{title}</a></Link></h1>
+      <p className="text-gray-600 text-sm">{format(parseISO(date), 'MMMM do, uuu')}</p>
+      <p>{content}</p>
     </div>
   )
 }
